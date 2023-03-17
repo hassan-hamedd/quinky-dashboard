@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getAllContent, getContentDetail, createContent, updateContent, deleteContent } from "../controllers/content.controller.js";
+import { getAllContent, getContentDetail, createContent, updateContent, deleteContent } from "../controllers/learningContent.controller.js";
 
 const router = express.Router();
 

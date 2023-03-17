@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 
 import connectDB from "./mongodb/connect.js";
 import userRouter from "./routes/user.routes.js";
-import contentRouter from "./routes/content.routes.js";
+import learningContentRouter from "./routes/learningContent.routes.js";
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/content", contentRouter);
+app.use("/api/v1/content", learningContentRouter);
 
 
 const startServer = async () => {

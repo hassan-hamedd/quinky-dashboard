@@ -27,7 +27,7 @@ const AllContent = () => {
 
     return {
       title: logicalFilters.find((item) => item.field === "title")?.value || "",
-      contentType: logicalFilters.find((item) => item.field === "contentType")?.value || "",
+      contentCategory: logicalFilters.find((item) => item.field === "contentCategory")?.value || "",
     }
   }, [filters]);
 
@@ -41,12 +41,6 @@ const AllContent = () => {
           <Typography fontSize={25} fontWeight={700} color="#11142D">{!allContent.length ? "There's no content" : "All Content"}</Typography>
           <Box mb={2} mt={3} display="flex" width="84%" justifyContent="space-between" flexWrap="wrap">
             <Box display="flex" gap={2} flexWrap="wrap" mb={{ xs: "20px", sm: 0 }}>
-              {/* <CustomButton
-                title="Sort Content Type"
-                handleClick={() => {}}
-                backgroundColor="#475be8"
-                color="#fcfcfc"
-              /> */}
               <TextField
                 variant="outlined"
                 color="info"
@@ -69,11 +63,11 @@ const AllContent = () => {
                 required
                 inputProps={{ "aria-label": "Without label" }}
                 defaultValue=""
-                value={currentFilterValues.contentType}
+                value={currentFilterValues.contentCategory}
                 onChange={(e) => {
                   setFilters([
                     {
-                      field: "contentType",
+                      field: "contentCategory",
                       operator: "eq",
                       value: e.target.value
                     },
@@ -81,7 +75,8 @@ const AllContent = () => {
                 }}
               >
                 <MenuItem value="">All</MenuItem>
-                {["quinky", "kinky", "cute"].map((type) => (
+                {["sex positions", "anatomy", "history", "animal world", "compatibility", "health", 
+                  "communication during sex", "what's normal", "dictionary"].map((type) => (
                   <MenuItem key={type} value={type}>
                     {type.charAt(0).toUpperCase() + type.slice(1)}
                   </MenuItem>
@@ -108,8 +103,7 @@ const AllContent = () => {
             key={content._id}
             id={content._id}
             title={content.title}
-            photo={content.photo}
-            contentType={content.contentType}
+            contentCategory={content.contentCategory}
           />
         ))}
       </Box>

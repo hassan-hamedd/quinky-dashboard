@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { 
   Box, 
   Typography, 
@@ -10,11 +11,28 @@ import {
   MenuItem, 
   Button 
 } from "@pankod/refine-mui";
+import { AddCircleOutlineOutlined } from "@mui/icons-material";
 
 import { FormProps } from "interfaces/common";
+import { ContentCard2 } from "components";
 import CustomButton from "./CustomButton";
 
+interface Card {
+  _id: number;
+  title: string;
+  paragraphTitle: string;
+  paragraph: string;
+}
+
 const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, onFinishHandler, contentImage }: FormProps) => {
+  const [prevCards, setPrevCards] = useState<Card[]>([]);
+  const [newCards, setNewCards] = useState<Card[]>([]);
+
+  useEffect(() => {
+    const cards: Card[] = [{ _id: 1, title: "Card 1", paragraphTitle: "Paragraph Title", paragraph: "Card paragraph" }];
+    setPrevCards(cards);
+  }, []);
+
   return (
     <Box>
       <Typography fontSize={25} fontWeight={700} color="#11142D">
@@ -115,6 +133,36 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
             <Typography fontSize={14} color="#808191" sx={{ wordBreak: "break-all" }}>
               {contentImage?.name}
             </Typography>
+          </Stack>
+
+          <Stack direction="column" gap={1} justifyContent="center" mb={2}>
+            <Stack direction="row" gap={2}>
+              <Typography fontSize={16} fontWeight={500} my="10px" color="#11142D">
+                  Cards
+              </Typography>
+              <CustomButton
+                  title="Create Card"
+                  backgroundColor="#475BE8"
+                  color="#FCFCFC"
+                  fullWidth={false}
+                  icon={<AddCircleOutlineOutlined />}
+                  handleClick={() => {
+                    return;
+                  }}
+              />
+            </Stack>
+
+            <Box mt="20px" sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+              {prevCards.map((content) => (
+                <ContentCard2
+                  key={content._id}
+                  id={content._id}
+                  title={content.title}
+                  paragraphTitle={content.paragraphTitle}
+                  paragraph={content.paragraph}
+                />
+              ))}
+            </Box>
           </Stack>
 
           <CustomButton

@@ -16,6 +16,12 @@ export interface FormValues {
 export interface ContentCardProps {
   id?: BaseKey | undefined,
   title: string,
-  photo: string,
-  contentType: string,
+  contentCategory: string,
+}
+
+export interface ContentCard2Props {
+  id?: BaseKey | undefined,
+  title: string,
+  paragraphTitle: string,
+  paragraph: string,
 }

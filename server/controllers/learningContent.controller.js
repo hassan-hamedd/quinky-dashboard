@@ -10,16 +10,17 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+import LearningContent from "../mongodb/models/learningContent.js";
 import Content from "../mongodb/models/content.js";
 import User from "../mongodb/models/user.js";
 
 const getAllContent = async (req, res) => {
-    const { _end, _order, _start, _sort, title_like = "", contentType = "" } = req.query;
+    const { _end, _order, _start, _sort, title_like = "", contentCategory = "" } = req.query;
 
     const query = {};
 
-    if(contentType !== "") {
-        query.contentType = contentType;
+    if(contentCategory !== "") {
+        query.contentCategory = contentCategory;
     }
 
     if(title_like !== "") {
@@ -27,9 +28,9 @@ const getAllContent = async (req, res) => {
     }
 
     try {
-        const count = await Content.countDocuments({ query });
+        const count = await LearningContent.countDocuments({ query });
 
-        const content = await Content
+        const content = await LearningContent
             .find(query)
             .limit(_end)
             .skip(_start)
@@ -46,7 +47,7 @@ const getAllContent = async (req, res) => {
 
 const getContentDetail = async (req, res) => {
     const { id } = req.params;
-    const contentExists = await Content.findOne({ _id: id }).populate("creator");
+    const contentExists = await LearningContent.findOne({ _id: id }).populate("creator");
 
     if (contentExists) {
         res.status(200).json(contentExists);
@@ -57,7 +58,7 @@ const getContentDetail = async (req, res) => {
 
 const createContent = async (req, res) => {
     try {
-        const { title, description, contentType, photo, email } = req.body;
+        const { email, title, contentCategory, introCards, infoStacks } = req.body;
     
         // Start a new session...
         const session = await mongoose.startSession();
@@ -67,17 +68,15 @@ const createContent = async (req, res) => {
     
         if (!user) throw new Error("User not found");
     
-        const photoUrl = await cloudinary.uploader.upload(photo);
-    
-        const newContent = await Content.create({
+        const newLearningContent = await LearningContent.create({
             title,
-            description,
-            contentType,
-            photo: photoUrl.url,
+            contentCategory,
+            introCards,
+            infoStacks,
             creator: user._id,
         });
     
-        user.allContent.push(newContent._id);
+        user.allContent.push(newLearningContent._id);
         await user.save({ session });
     
         await session.commitTransaction();
@@ -107,7 +106,7 @@ const deleteContent = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const contentToDelete = await Content.findById({ _id: id }).populate("creator");
+        const contentToDelete = await LearningContent.findById({ _id: id }).populate("creator");
 
         if(!contentToDelete) throw new Error("Content not found");
         

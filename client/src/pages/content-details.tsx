@@ -1,10 +1,29 @@
 /* eslint-disable no-restricted-globals */
-import { Typography, Box, Stack } from '@pankod/refine-mui';
+import { Typography, Box, Stack, TextField } from '@pankod/refine-mui';
 import { useDelete, useGetIdentity, useShow } from '@pankod/refine-core';
 import { useParams, useNavigate } from '@pankod/refine-react-router-v6';
 import { ChatBubble, Delete, Edit, Phone, Place, SourceOutlined, Star } from '@mui/icons-material';
 
 import { CustomButton } from 'components';
+import IntroCardDetails from 'components/common/IntroCardDetails';
+import InfoCardDetails from 'components/common/InfoCardDetails';
+
+interface IntroCard {
+  index: number;
+  title: string;
+  paragraph: string; 
+}
+
+interface InfoCard {
+  title: string;
+  paragraphTitle: string;
+  paragraph: string;
+}
+
+interface InfoStack {
+  cards: InfoCard[];
+  checkpoint: string;
+}
 
 function checkImage(url: any) {
   let img = new Image();
@@ -47,6 +66,8 @@ const ContentDetails = () => {
     }
   };
 
+  console.log("Content Details:", contentDetails)
+
   return (
     <Box
       borderRadius="15px"
@@ -56,58 +77,141 @@ const ContentDetails = () => {
     >
       <Typography fontSize={25} fontWeight={700} color="#11142D">Details</Typography>
 
-      <Box mt="20px" display="flex" flexDirection={{ xs: 'column', lg: 'row' }} gap={4}>
+      <Box mt="20px" display="flex" flexDirection="column" gap={4}>
 
         <Box flex={1} maxWidth={764}>
-          <img
-            src={contentDetails.photo}
-            alt="content_details-img"
-            height={546}
-            style={{ objectFit: 'cover', borderRadius: '10px' }}
-            className="property_details-img"
-          />
 
           <Box mt="15px">
-            {/* <Stack direction="row" justifyContent="space-between" flexWrap="wrap" alignItems="center">
-              <Typography fontSize={18} fontWeight={500} color="#11142D" textTransform="capitalize">{contentDetails.propertyType}</Typography>
-              <Box>
-                {[1, 2, 3, 4, 5].map((item) => <Star key={`star-${item}`} sx={{ color: '#F2C94C' }} />)}
-              </Box>
-            </Stack> */}
-
-            <Stack direction="row" flexWrap="wrap" justifyContent="space-between" alignItems="center" gap={2}>
-              <Box>
+            <Stack direction="row" flexWrap="wrap" justifyContent="space-between" alignItems="center" gap={2} width="100%">
+              <Stack direction="row" flexWrap="wrap" justifyContent="space-between" alignItems="center" gap={5} width="100%">
                 <Typography fontSize={22} fontWeight={600} mt="10px" color="#11142D">{contentDetails.title}</Typography>
                 <Stack mt={0.5} direction="row" alignItems="center" gap={0.5}>
-                  <Place sx={{ color: '#808191' }} />
-                  <Typography fontSize={14} color="#808191" textTransform="capitalize">{contentDetails.contentType}</Typography>
+                  <SourceOutlined sx={{ color: '#808191' }} />
+                  <Typography fontSize={14} color="#808191" textTransform="capitalize">{contentDetails.contentCategory}</Typography>
                 </Stack>
-              </Box>
-
-              {/* <Box>
-                <Typography fontSize={16} fontWeight={600} mt="10px" color="#11142D">Price</Typography>
-                <Stack direction="row" alignItems="flex-end" gap={1}>
-                  <Typography fontSize={25} fontWeight={700} color="#475BE8">${contentDetails.price}</Typography>
-                  <Typography fontSize={14} color="#808191" mb={0.5}>for one day</Typography>
-                </Stack>
-              </Box> */}
+              </Stack>
             </Stack>
-
-            {/* <Stack mt="25px" direction="column" gap="10px">
-              <Typography fontSize={18} color="#11142D">Description</Typography>
-              <Typography fontSize={14} color="#808191">
-                {contentDetails.description}
-              </Typography>
-            </Stack> */}
           </Box>
         </Box>
 
         <Box width="100%" flex={1} maxWidth={326} display="flex" flexDirection="column" gap="20px">
           <Stack mt="25px" mb="25px" direction="column" gap="10px">
-              <Typography fontSize={18} color="#11142D">Description</Typography>
-              <Typography fontSize={14} color="#808191">
-                {contentDetails.description}
+              <Typography fontSize={18} color="#11142D">Intro Cards</Typography>
+              <Typography fontSize={14} fontWeight={400} color="#11142D" sx={{ margin: "10px 0" }}>
+                Checkpoint Text
               </Typography>
+              <TextField
+                  fullWidth
+                  disabled
+                  size="small"
+                  id="outlined-basic"
+                  color="info"
+                  variant="outlined"
+                  placeholder="Checkpoint text.."
+                  value={contentDetails.introCards.checkpoint}
+                  InputProps={{
+                    style: {
+                      color: '#11142D',
+                    },
+                  }}
+              />
+              <Box mt="10px" sx={{ display: "flex", justifyContent: "flex-start" }}>
+                {contentDetails.introCards.cards.length > 0 ? (
+                    <Box sx={{ 
+                        overflowX: "scroll", 
+                        overflowY: "hidden", 
+                        whiteSpace: "nowrap", 
+                        maxWidth: "1000px", 
+                        '&::-webkit-scrollbar': {
+                            width: '2px',
+                            backgroundColor: '#F9F9F9'
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#000000',
+                            width: '2px',
+                            borderRadius: '10px',
+                            '&:hover': {
+                                backgroundColor: '#1A1A1A'
+                            }
+                        },
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#000000 #F5F5F5'
+                    }}>
+                        {contentDetails.introCards.cards.map((introCard: IntroCard, index: number) => (
+                            <IntroCardDetails
+                                key={index}
+                                index={index}
+                                title={introCard.title}
+                                paragraph={introCard.paragraph}
+                            />
+                        ))}
+                    </Box>
+                ) : <Typography fontSize={14} fontWeight={500} color="#808191">No intro cards</Typography>}
+                </Box>
+          </Stack>
+
+          <Stack mt="25px" mb="25px" direction="column" gap="10px">
+          <Typography fontSize={18} color="#11142D">Info Cards</Typography>
+          {contentDetails.infoStacks.length > 0 ? (
+                    contentDetails.infoStacks.map((infoStack: InfoStack, stackIndex: number) => (
+                        <Box>
+                            <Stack direction="row" gap={2} alignItems="center">
+                                <Typography fontSize={15} fontWeight={500} my="10px" color="#11142D">
+                                    Stack {stackIndex + 1}
+                                </Typography>
+                            </Stack>
+                            <Box sx={{ width: "100%" }}>
+                                <Typography sx={{ fontWeight: 400, margin: "10px 0", fontSize: 14, color: "#11142D" }}>
+                                    Checkpoint Text
+                                </Typography>
+                                <TextField
+                                    fullWidth
+                                    disabled
+                                    size="small"
+                                    id="outlined-basic"
+                                    color="info"
+                                    variant="outlined"
+                                    placeholder="Checkpoint text.."
+                                    value={infoStack.checkpoint}
+                                />
+                            </Box>
+                            <Box mt="10px" sx={{ display: "flex", justifyContent: "flex-start" }}>
+                                {infoStack.cards.length > 0 ? (
+                                    <Box sx={{ 
+                                        overflowX: "scroll", 
+                                        overflowY: "hidden", 
+                                        whiteSpace: "nowrap", 
+                                        maxWidth: "1000px", 
+                                        '&::-webkit-scrollbar': {
+                                            width: '2px',
+                                            backgroundColor: '#F9F9F9'
+                                        },
+                                        '&::-webkit-scrollbar-thumb': {
+                                            backgroundColor: '#000000',
+                                            borderRadius: '10px',
+                                            '&:hover': {
+                                                backgroundColor: '#1A1A1A'
+                                            }
+                                        },
+                                        scrollbarWidth: 'thin',
+                                        scrollbarColor: '#000000 #F5F5F5'
+                                    }}>
+                                        {infoStack.cards.map((infoCard, index) => (
+                                            <InfoCardDetails
+                                                key={index}
+                                                index={index}
+                                                stackIndex={stackIndex}
+                                                title={infoCard.title}
+                                                paragraphTitle={infoCard.paragraphTitle}
+                                                paragraph={infoCard.paragraph}
+                                            />
+                                        ))}
+                                    </Box>
+                                ) : <Typography fontSize={14} fontWeight={500} color="#808191">No info cards in this stack</Typography>}
+                            </Box>
+                        </Box>
+                    ))
+                ) : <Typography fontSize={14} fontWeight={500} color="#808191">No info stacks</Typography>}
           </Stack>
           <Stack
             width="100%"
@@ -132,11 +236,6 @@ const ContentDetails = () => {
                 <Typography fontSize={18} fontWeight={600} color="#11142D">{contentDetails.creator.name}</Typography>
                 <Typography mt="5px" fontSize={14} fontWeight={400} color="#808191">Team member</Typography>
               </Box>
-
-              {/* <Stack mt="15px" direction="row" alignItems="center" gap={1}>
-                <Place sx={{ color: '#808191' }} />
-                <Typography fontSize={14} fontWeight={400} color="#808191">North Carolina, USA</Typography>
-              </Stack> */}
 
               <Typography mt={1} fontSize={16} fontWeight={600} color="#11142D">{contentDetails.creator.allContent.length} published tasks</Typography>
             </Stack>

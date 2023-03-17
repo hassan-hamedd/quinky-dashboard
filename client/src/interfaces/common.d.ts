@@ -27,6 +27,22 @@ export interface PropertyProps {
     creator: string
 }
 
+interface IntroCard {
+    title: string;
+    paragraph: string;
+}
+
+interface InfoCard {
+    title: string;
+    paragraphTitle: string;
+    paragraph: string;
+}
+
+interface InfoStack {
+    cards: InfoCard[];
+    checkpoint: string;
+}
+
 export interface FormProps {
     type: string,
     register: any,
@@ -36,4 +52,24 @@ export interface FormProps {
     handleImageChange: (file) => void,
     onFinishHandler: (data: FieldValues) => Promise<void> | void,
     contentImage: { name: string, url: string },
+}
+
+interface IntroCardsContainer {
+    cards: IntroCard[];
+    checkpoint: string;
+}
+
+export interface LearningContentFormProps {
+    type: string,
+    register: any,
+    onFinish: (values: FieldValues) => Promise<void | CreateResponse<BaseRecord> | UpdateResponse<BaseRecord>>,
+    formLoading: boolean,
+    handleSubmit: FormEventHandler<HTMLFormElement> | undefined,
+    handleImageChange: (file) => void,
+    onFinishHandler: (data: FieldValues) => Promise<void> | void,
+    contentImage: { name: string, url: string },
+    introCards: { cards: IntroCard[], checkpoint: string },
+    setIntroCards: Dispatch<SetStateAction<IntroCardsContainer>>,
+    infoStacks: InfoStack[],
+    setInfoStacks: React.Dispatch<SetStateAction<InfoStack[]>>,
 }
