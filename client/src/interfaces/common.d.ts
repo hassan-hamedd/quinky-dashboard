@@ -52,6 +52,8 @@ export interface FormProps {
     handleImageChange: (file) => void,
     onFinishHandler: (data: FieldValues) => Promise<void> | void,
     contentImage: { name: string, url: string },
+    gameCards: any[],
+    setGameCards: React.Dispatch<SetStateAction<any[]>>,
 }
 
 interface IntroCardsContainer {

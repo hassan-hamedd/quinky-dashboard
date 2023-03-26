@@ -4,8 +4,9 @@ import { useTable } from "@pankod/refine-core";
 import { Box, Stack, Typography, TextField, Select, MenuItem } from "@pankod/refine-mui";
 import { useNavigate } from "@pankod/refine-react-router-v6";
 import { ContentCard, CustomButton } from "components";
+import GamesCard from "components/common/GamesCard";
 
-const AllContent = () => {
+const AllGames = () => {
   const navigate = useNavigate();
   const { 
     tableQueryResult: { data, isLoading, isError },
@@ -38,7 +39,19 @@ const AllContent = () => {
     <Box>
       <Box mt="20px" sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
         <Stack direction="column" width="100%">
-          <Typography fontSize={25} fontWeight={700} color="#11142D">{!allContent.length ? "There's no learning content" : "All Learning Content"}</Typography>
+          <Typography fontSize={25} fontWeight={700} color="#11142D">{
+            !allContent.length ? 
+            currentFilterValues.contentCategory === "" 
+            ? "There aren't any games" 
+            : currentFilterValues.contentCategory === "quinky" 
+            ? "There aren't any Quinky games" 
+            : "There aren't any Kinky games" 
+            : currentFilterValues.contentCategory === "" 
+            ? "All Games"
+            : currentFilterValues.contentCategory === "quinky"
+            ? "Quinky Games"
+            : "Kinky Games" 
+          }</Typography>
           <Box mb={2} mt={3} display="flex" width="84%" justifyContent="space-between" flexWrap="wrap">
             <Box display="flex" gap={2} flexWrap="wrap" mb={{ xs: "20px", sm: 0 }}>
               <TextField
@@ -75,8 +88,7 @@ const AllContent = () => {
                 }}
               >
                 <MenuItem value="">All</MenuItem>
-                {["sex positions", "anatomy", "history", "animal world", "compatibility", "health", 
-                  "communication during sex", "what's normal", "dictionary"].map((type) => (
+                {["quinky", "kinky"].map((type) => (
                   <MenuItem key={type} value={type}>
                     {type.charAt(0).toUpperCase() + type.slice(1)}
                   </MenuItem>
@@ -89,8 +101,8 @@ const AllContent = () => {
 
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <CustomButton 
-          title="Add Content"
-          handleClick={() => navigate("../content/create", { replace: true })}
+          title="Add Games"
+          handleClick={() => navigate("../games/create", { replace: true })}
           backgroundColor="#475be8"
           color="#fcfcfc"
           icon={<Add />}
@@ -99,11 +111,13 @@ const AllContent = () => {
 
       <Box mt="20px" sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
         {allContent.map((content) => (
-          <ContentCard
+          <GamesCard
             key={content._id}
             id={content._id}
             title={content.title}
+            photo={content.coverImage}
             contentCategory={content.contentCategory}
+            spiciness={content.spiciness}
           />
         ))}
       </Box>
@@ -150,4 +164,4 @@ const AllContent = () => {
   )
 }
 
-export default AllContent;
+export default AllGames;

@@ -242,25 +242,25 @@ const ContentDetails = () => {
 
             <Stack width="100%" mt="25px" direction="row" flexWrap="wrap" gap={2}>
               <CustomButton
-                title={!isCurrentUser ? 'Message' : 'Edit'}
+                title={'Edit'}
                 backgroundColor="#475BE8"
                 color="#FCFCFC"
                 fullWidth
-                icon={!isCurrentUser ? <ChatBubble /> : <Edit />}
+                icon={<Edit />}
                 handleClick={() => {
-                  if (isCurrentUser) {
-                    navigate(`/content/edit/${contentDetails._id}`);
-                  }
+                  // navigate(`/content/edit/${contentDetails._id}`);
+                  alert("We are working on the Edit learning content feature :)");
+                  return;
                 }}
               />
               <CustomButton
-                title={!isCurrentUser ? 'Call' : 'Delete'}
+                title={'Delete'}
                 backgroundColor={!isCurrentUser ? '#2ED480' : '#d42e2e'}
                 color="#FCFCFC"
                 fullWidth
-                icon={!isCurrentUser ? <Phone /> : <Delete />}
+                icon={<Delete />}
                 handleClick={() => {
-                  if (isCurrentUser) handleDeleteContent();
+                  handleDeleteContent();
                 }}
               />
             </Stack>

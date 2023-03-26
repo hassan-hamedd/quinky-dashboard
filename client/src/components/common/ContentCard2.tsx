@@ -7,8 +7,8 @@ import { ContentCard2Props } from "interfaces/property";
 const ContentCard2 = ({ id, title, paragraphTitle, paragraph }: ContentCard2Props) => {
   return (
     <Card
-      component={Link}
-      to={`/content/show/${id}`}
+      // component={Link}
+      // to={`/learning/show/${id}`}
       sx={{
         maxWidth: "330px",
         padding: "10px",

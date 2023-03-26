@@ -19,9 +19,22 @@ export interface ContentCardProps {
   contentCategory: string,
 }
 
+export interface GamesCardProps {
+  id?: BaseKey | undefined,
+  title: string,
+  photo: string,
+  contentCategory: string,
+  spiciness: number
+}
+
 export interface ContentCard2Props {
   id?: BaseKey | undefined,
   title: string,
   paragraphTitle: string,
   paragraph: string,
+}
+
+export interface ContentCard3Props {
+  id?: BaseKey | undefined,
+  card: any,
 }

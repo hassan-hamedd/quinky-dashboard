@@ -16,6 +16,8 @@ import { AddCircleOutlineOutlined } from "@mui/icons-material";
 import { FormProps } from "interfaces/common";
 import { ContentCard2 } from "components";
 import CustomButton from "./CustomButton";
+import GameCardModal from "./GameCardModal";
+import ContentCard3 from "./ContentCard3";
 
 interface Card {
   _id: number;
@@ -24,19 +26,24 @@ interface Card {
   paragraph: string;
 }
 
-const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, onFinishHandler, contentImage }: FormProps) => {
+const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, onFinishHandler, contentImage, gameCards, setGameCards }: any) => {
   const [prevCards, setPrevCards] = useState<Card[]>([]);
-  const [newCards, setNewCards] = useState<Card[]>([]);
+
+  const [isGameCardModalOpen, setIsGameCardModalOpen] = useState(false);
 
   useEffect(() => {
     const cards: Card[] = [{ _id: 1, title: "Card 1", paragraphTitle: "Paragraph Title", paragraph: "Card paragraph" }];
     setPrevCards(cards);
   }, []);
 
+  useEffect(() => {
+    console.log("gameCards: ", gameCards);
+  }, [gameCards])
+
   return (
     <Box>
       <Typography fontSize={25} fontWeight={700} color="#11142D">
-        {type} a new piece of Content
+        {type} a New Game
       </Typography>
 
       <Box mt={2.5} borderRadius="15px" padding="20px" bgcolor="#fcfcfc">
@@ -46,7 +53,7 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
         >
           <FormControl>
             <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
-              Enter Content Name
+              Enter Game Title
             </FormHelperText>
             <TextField
               fullWidth
@@ -57,9 +64,10 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
               {...register("title", { required: true })}
             />
           </FormControl>
+
           <FormControl>
             <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
-              Enter Content Description
+              Enter Game Description
             </FormHelperText>
             <TextareaAutosize 
               minRows={5}
@@ -72,10 +80,52 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
             />
           </FormControl>
 
+          <FormControl>
+            <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
+              First intro text
+            </FormHelperText>
+            <TextField
+              fullWidth
+              required
+              id="outlined-basic"
+              color="info"
+              variant="outlined"
+              {...register("introTextOne", { required: true })}
+            />
+          </FormControl>
+          
+          <FormControl>
+            <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
+              Second intro text
+            </FormHelperText>
+            <TextField
+              fullWidth
+              required
+              id="outlined-basic"
+              color="info"
+              variant="outlined"
+              {...register("introTextTwo", { required: true })}
+            />
+          </FormControl>
+
+          <FormControl>
+            <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
+              Tags
+            </FormHelperText>
+            <TextField
+              fullWidth
+              required
+              id="outlined-basic"
+              color="info"
+              variant="outlined"
+              {...register("unfilteredTags", { required: true })}
+            />
+          </FormControl>
+
           <Stack direction="row" gap={4}>
             <FormControl sx={{ flex: 1 }}>
               <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
-                Select Content Type
+                Select Game Category
               </FormHelperText>
               <Select
                 variant="outlined"
@@ -84,16 +134,16 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
                 required
                 inputProps={{ "aria-label": "Without label" }}
                 defaultValue="quinky"
-                {...register("contentType", { required: true })}
+                {...register("contentCategory", { required: true })}
               >
                 <MenuItem value="quinky">Quinky</MenuItem>
-                <MenuItem value="cute">Cute</MenuItem>
                 <MenuItem value="kinky">Kinky</MenuItem>
               </Select>
             </FormControl>
+
             <FormControl sx={{ flex: 1 }}>
               <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
-                Select Content Layout
+                Choose Game Spiciness 🌶
               </FormHelperText>
               <Select
                 variant="outlined"
@@ -101,15 +151,22 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
                 displayEmpty
                 required
                 inputProps={{ "aria-label": "Without label" }}
-                defaultValue="bullet"
-                {...register("contentType", { required: true })}
+                defaultValue="quinky"
+                {...register("spiciness", { required: true })}
               >
-                <MenuItem value="bullet">Bullet Points</MenuItem>
-                <MenuItem value="imgDescription">Image/ Description</MenuItem>
-                <MenuItem value="text">Text</MenuItem>
+                {["🌶", "🌶🌶", "🌶🌶🌶", "🌶🌶🌶🌶", "🌶🌶🌶🌶🌶"].map((spicy, index) => (
+                  <MenuItem value={index + 1}>{spicy}</MenuItem>
+                ))}
               </Select>
-            </FormControl>
+            </FormControl>          
           </Stack>
+
+          <GameCardModal
+            isGameCardModalOpen={isGameCardModalOpen}
+            setIsGameCardModalOpen={setIsGameCardModalOpen}
+            setGameCards={setGameCards}
+          />
+
           <Stack direction="column" gap={1} justifyContent="center" mb={2}>
             <Stack direction="row" gap={2}>
               <Typography fontSize={16} fontWeight={500} my="10px" color="#11142D">
@@ -147,19 +204,17 @@ const Form = ({ type, register, handleSubmit, handleImageChange, formLoading, on
                   fullWidth={false}
                   icon={<AddCircleOutlineOutlined />}
                   handleClick={() => {
-                    return;
+                    setIsGameCardModalOpen(true)
                   }}
               />
             </Stack>
 
             <Box mt="20px" sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
-              {prevCards.map((content) => (
-                <ContentCard2
-                  key={content._id}
-                  id={content._id}
-                  title={content.title}
-                  paragraphTitle={content.paragraphTitle}
-                  paragraph={content.paragraph}
+              {gameCards.map((card: any) => (
+                <ContentCard3
+                  key={card._id}
+                  id={card._id}
+                  card={card}
                 />
               ))}
             </Box>

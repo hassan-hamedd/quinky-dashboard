@@ -13,9 +13,8 @@ import {
   AccountCircleOutlined,
   ChatBubbleOutline,
   PeopleAltOutlined,
-  StarOutlineRounded,
-  VillaOutlined,
-  AodOutlined
+  VideogameAssetOutlined,
+  HistoryEduOutlined
 } from "@mui/icons-material";
 
 import dataProvider from "@pankod/refine-simple-rest";
@@ -34,7 +33,9 @@ import {
   MyProfile,
   ContentDetails,
   AllContent,
+  AllGames,
   CreateContent,
+  CreateGames,
   UserProfile,
   EditContent
  } from "pages";
@@ -138,13 +139,22 @@ function App() {
           catchAll={<ErrorComponent />}
           resources={[
             {
-              name: "content",
-              options: { label: "Content" },
+              name: "learning",
+              options: { label: "Learning" },
               list: AllContent,
               show: ContentDetails,
               create: CreateContent,
               edit: EditContent,
-              icon: <AodOutlined />
+              icon: <HistoryEduOutlined />
+            },
+            {
+              name: "games",
+              options: { label: "Games" },
+              list: AllGames,
+              show: ContentDetails,
+              create: CreateGames,
+              edit: EditContent,
+              icon: <VideogameAssetOutlined />
             },
             {
               name: "users",

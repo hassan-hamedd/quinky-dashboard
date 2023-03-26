@@ -8,7 +8,7 @@ const ContentCard = ({ id, title, contentCategory }: ContentCardProps) => {
   return (
     <Card
       component={Link}
-      to={`/content/show/${id}`}
+      to={`/learning/show/${id}`}
       sx={{
         maxWidth: "330px",
         padding: "10px",
