@@ -86,6 +86,24 @@ const ContentCard3 = ({ id, card }: ContentCard3Props) => {
                 />
             ) : null}
 
+            {card.cardType === "paragraphAndImage" ? (
+                <>
+                    <Box bgcolor="#EDEDED" borderRadius={2} padding={2} marginBottom={3}>
+                        <Typography fontSize={14} fontWeight={500} color="#808191">
+                            {card.paragraph}
+                        </Typography>
+                    </Box>
+                    <CardMedia
+                        component="img"
+                        width="auto"
+                        height="auto"
+                        image={card.paragraphImage}
+                        alt="card image"
+                        sx={{ borderRadius: "10px" }}
+                    />
+                </>
+            ) : null}
+
             {card.cardType === "tipsAndPrecautions" ? (
                 <Stack direction="row" gap={0.4} alignItems="flex-start" justifyContent="center">
                     <Stack direction="column" gap={0.5} alignItems="flex-start">

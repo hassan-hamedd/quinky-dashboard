@@ -51,6 +51,9 @@ const ContentSchema = new mongoose.Schema({
             paragraph: {
                 type: String,
             },
+            paragraphImage: {
+                type: String,
+            },
             emojis: {
                 type: String,
             },

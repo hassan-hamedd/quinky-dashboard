@@ -57,6 +57,7 @@ const GameCardModal = ({ isGameCardModalOpen, setIsGameCardModalOpen, setGameCar
     const [emojis, setEmojis] = useState("");
     const [paragraphFontWeight, setParagraphFontWeight] = useState("");
     const [listImage, setListImage] = useState("");
+    const [paragraphImage, setParagraphImage] = useState("");
 
     return (
         <Dialog open={isGameCardModalOpen} onClose={() => {return;}}>
@@ -100,6 +101,7 @@ const GameCardModal = ({ isGameCardModalOpen, setIsGameCardModalOpen, setGameCar
                                     {name: "Title & Paragraph", value: "titleAndParagraph"},
                                     {name: "Title & List", value: "titleAndList"},
                                     {name: "Tips & Precautions", value: "tipsAndPrecautions"},
+                                    {name: "Paragraph & Image", value: "paragraphAndImage"},
                                 ].map((item) => (
                                     <MenuItem key={item.value} value={item.value}>
                                         {item.name}
@@ -108,7 +110,7 @@ const GameCardModal = ({ isGameCardModalOpen, setIsGameCardModalOpen, setGameCar
                             </Select>
                         </FormControl>
 
-                    {cardType === "titleAndList" || cardType === "titleAndParagraph" ? (
+                    {cardType === "titleAndList" || cardType === "titleAndParagraph" || cardType === "paragraphAndImage" ? (
                         <FormControl>
                             <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
                                 Enter Card Title
@@ -179,7 +181,7 @@ const GameCardModal = ({ isGameCardModalOpen, setIsGameCardModalOpen, setGameCar
                         </FormControl>
                     ) : null}
 
-                    {cardType === "titleAndParagraph"? (
+                    {cardType === "titleAndParagraph" || cardType === "paragraphAndImage" ? (
                         <FormControl>
                             <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
                             Enter Paragraph
@@ -193,6 +195,23 @@ const GameCardModal = ({ isGameCardModalOpen, setIsGameCardModalOpen, setGameCar
                                 borderRadius: 6, padding: 10, color: "#919191" }}
                                 value={cardParagraph}
                                 onChange={(e) => setCardParagraph(e.target.value)}
+                            />
+                        </FormControl>
+                    ) : null}
+
+                    {cardType === "paragraphAndImage" ? (
+                        <FormControl>
+                            <FormHelperText sx={{ fontWeight: 500, margin: "10px 0", fontSize: 16, color: "#11142D" }}>
+                                Enter Image URL
+                            </FormHelperText>
+                            <TextField
+                                fullWidth
+                                id="outlined-basic"
+                                color="info"
+                                variant="outlined"
+                                placeholder="Paste the image URL here..."
+                                value={paragraphImage}
+                                onChange={(e) => setParagraphImage(e.target.value)}
                             />
                         </FormControl>
                     ) : null}
@@ -350,6 +369,25 @@ const GameCardModal = ({ isGameCardModalOpen, setIsGameCardModalOpen, setGameCar
                             emojis,
                             paragraphFontWeight,
                         }
+                    } else if(cardType === "paragraphAndImage") {
+                        if(cardParagraph.length === 0) {
+                            alert("Please enter paragraph");
+                            return;
+                        }
+                        if(paragraphImage.length === 0) {
+                            alert("Please enter image URL");
+                            return;
+                        }
+                        if(!isValidURL(paragraphImage)) {
+                            alert("Please enter valid image URL");
+                            return;
+                        }
+                        card = {
+                            cardType,
+                            title: cardTitle,
+                            paragraph: cardParagraph,
+                            paragraphImage: paragraphImage,
+                        }
                     } else if(cardType === "tipsAndPrecautions") {
                         if(tipOneText.length === 0 || tipOneImage.length === 0 || tipTwoText.length === 0 || tipTwoImage.length === 0) {
                             alert("Please enter all fields");
@@ -413,6 +451,7 @@ const GameCardModal = ({ isGameCardModalOpen, setIsGameCardModalOpen, setGameCar
                         setParagraphFontWeight("");
                         setCardTag("");
                         setEmojis("");
+                        setParagraphImage("");
                         setIsGameCardModalOpen(false);
                     } catch(e) {
                         alert(`Error. Cannot add card ${e}`);
